@@ -30,7 +30,8 @@ export function FavoriteButton({ movie, size = 'icon', className }: FavoriteButt
   const dispatch = useAppDispatch();
   const { data: session } = useSession();
   const favorites = useAppSelector((state) => state.favorites.favorites);
-  const isFavorite = favorites.some((fav) => fav.id === movie.id);
+  // Only show as favorite if user is logged in AND movie is in favorites
+  const isFavorite = session ? favorites.some((fav) => fav.id === movie.id) : false;
   const [showLoginDialog, setShowLoginDialog] = useState(false);
 
   const handleToggle = (e: React.MouseEvent) => {
