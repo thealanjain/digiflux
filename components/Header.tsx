@@ -12,44 +12,47 @@ export function Header() {
   const favorites = useAppSelector((state) => state.favorites.favorites);
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between gap-4 mb-4">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold">
+        <div className="flex items-center justify-between gap-4">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold flex-shrink-0">
             <Film className="h-6 w-6" />
-            <span>MovieDB</span>
+            <span>DigiFlux Movie Browser</span>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex-1 max-w-2xl mx-4">
+            <SearchBar />
+          </div>
+
+          <div className="flex items-center gap-4 flex-shrink-0">
             {session && (
               <Link href="/favorites">
                 <Button variant="ghost" size="sm" className="gap-2">
                   <Heart className="h-4 w-4" />
-                  Favorites ({favorites.length})
+                  <span className="hidden sm:inline">Favorites ({favorites.length})</span>
+                  <span className="sm:hidden">({favorites.length})</span>
                 </Button>
               </Link>
             )}
 
             {session ? (
               <div className="flex items-center gap-3">
-                <span className="text-sm text-muted-foreground hidden sm:inline">
+                <span className="text-sm text-muted-foreground hidden md:inline">
                   {session.user?.name}
                 </span>
                 <Button onClick={() => signOut()} variant="outline" size="sm" className="gap-2">
                   <LogOut className="h-4 w-4" />
-                  Logout
+                  <span className="hidden sm:inline">Logout</span>
                 </Button>
               </div>
             ) : (
               <Button onClick={() => signIn('google')} size="sm" className="gap-2">
                 <LogIn className="h-4 w-4" />
-                Login
+                <span className="hidden sm:inline">Login</span>
               </Button>
             )}
           </div>
         </div>
-
-        <SearchBar />
       </div>
     </header>
   );
