@@ -1,18 +1,53 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 import { Header } from '@/components/Header';
-import { MovieCard } from '@/components/MovieCard';
-import { MovieCardSkeleton } from '@/components/MovieCardSkeleton';
-import { useSearchMovies } from '@/lib/hooks/useMovies';
+import { MovieListCard } from '@/components/MovieListCard';
+import { MovieListCardSkeleton } from '@/components/MovieListCardSkeleton';
+import { useInfiniteSearchMovies } from '@/lib/hooks/useMovies';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { AlertCircle, Search } from 'lucide-react';
+import { AlertCircle, Search, Loader2 } from 'lucide-react';
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q') || '';
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  const { data, isLoading, error } = useSearchMovies(query);
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteSearchMovies(query);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const allMovies = data?.pages.flatMap((page) => page.results) || [];
+  const totalResults = data?.pages[0]?.total_results || 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,20 +81,30 @@ export default function SearchPage() {
             </p>
           </div>
         ) : isLoading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <MovieCardSkeleton key={i} />
+          <div className="space-y-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <MovieListCardSkeleton key={i} />
             ))}
           </div>
-        ) : data?.results && data.results.length > 0 ? (
+        ) : allMovies.length > 0 ? (
           <>
-            <p className="mb-4 text-sm text-muted-foreground">
-              Found {data.total_results} results
+            <p className="mb-6 text-sm text-muted-foreground">
+              Found {totalResults} results
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {data.results.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
+            <div className="space-y-4">
+              {allMovies.map((movie) => (
+                <MovieListCard key={`${movie.id}-${movie.title}`} movie={movie} />
               ))}
+            </div>
+
+            {/* Infinite scroll trigger */}
+            <div ref={observerTarget} className="py-8 flex justify-center">
+              {isFetchingNextPage && (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  <span>Loading more...</span>
+                </div>
+              )}
             </div>
           </>
         ) : (
