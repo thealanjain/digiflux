@@ -73,7 +73,7 @@ export default function MovieDetailPage() {
         </div>
 
         {/* Content Section */}
-        <div className="container mx-auto px-4 -mt-32 relative z-10">
+        <div className="container mx-auto px-4 -mt-32 relative z-10 pb-16">
           <div className="flex flex-col md:flex-row gap-8">
             {/* Poster */}
             <div className="flex-shrink-0">
