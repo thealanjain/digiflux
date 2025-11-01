@@ -59,15 +59,17 @@ export default function MovieDetailPage() {
 
       <main>
         {/* Backdrop Section */}
-        <div className="relative h-[400px] w-full">
-          <Image
-            src={backdropUrl}
-            alt={movie.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        <div className="relative h-[400px] w-full bg-linear-to-br from-gray-800 via-gray-900 to-black">
+          {movie.backdrop_path && (
+            <Image
+              src={backdropUrl}
+              alt={movie.title}
+              fill
+              className="object-cover"
+              priority
+            />
+          )}
+          <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent" />
         </div>
 
         {/* Content Section */}
