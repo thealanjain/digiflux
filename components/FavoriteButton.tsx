@@ -110,6 +110,7 @@ export function FavoriteButton({ movie, size = 'icon', className }: FavoriteButt
               <Button
                 type="button"
                 variant="outline"
+                className="cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowLoginDialog(false);
@@ -119,6 +120,7 @@ export function FavoriteButton({ movie, size = 'icon', className }: FavoriteButt
               </Button>
               <Button
                 type="button"
+                className="cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleLogin();

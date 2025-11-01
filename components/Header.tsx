@@ -27,7 +27,7 @@ export function Header() {
           <div className="flex items-center gap-4 flex-shrink-0">
             {session && (
               <Link href="/favorites">
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 cursor-pointer">
                   <Heart className="h-4 w-4" />
                   <span className="hidden sm:inline">Favorites ({favorites.length})</span>
                   <span className="sm:hidden">({favorites.length})</span>
@@ -40,13 +40,13 @@ export function Header() {
                 <span className="text-sm text-muted-foreground hidden md:inline">
                   {session.user?.name}
                 </span>
-                <Button onClick={() => signOut()} variant="outline" size="sm" className="gap-2">
+                <Button onClick={() => signOut()} variant="outline" size="sm" className="gap-2 cursor-pointer">
                   <LogOut className="h-4 w-4" />
                   <span className="hidden sm:inline">Logout</span>
                 </Button>
               </div>
             ) : (
-              <Button onClick={() => signIn('google')} size="sm" className="gap-2">
+              <Button onClick={() => signIn('google')} size="sm" className="gap-2 cursor-pointer">
                 <LogIn className="h-4 w-4" />
                 <span className="hidden sm:inline">Login</span>
               </Button>
