@@ -16,13 +16,13 @@ export function MovieCard({ movie }: MovieCardProps) {
   const posterUrl = getPosterUrl(movie.poster_path);
 
   return (
-    <Link href={`/movie/${movie.id}`}>
-      <Card className="group overflow-hidden transition-all hover:scale-105 hover:shadow-lg relative">
+    <Link href={`/movie/${movie.id}`} className="h-full block">
+      <Card className="group overflow-hidden transition-all hover:scale-105 hover:shadow-lg relative h-full flex flex-col">
         <div className="absolute top-2 right-2 z-10">
           <FavoriteButton movie={movie} />
         </div>
-        <CardContent className="p-0">
-          <div className="relative aspect-2/3 w-full overflow-hidden bg-muted">
+        <CardContent className="p-0 flex flex-col flex-1">
+          <div className="relative aspect-[2/3] w-full overflow-hidden bg-muted">
             <Image
               src={posterUrl}
               alt={movie.title}
@@ -31,8 +31,8 @@ export function MovieCard({ movie }: MovieCardProps) {
               sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
             />
           </div>
-          <div className="p-4">
-            <h3 className="font-semibold line-clamp-2 mb-2">{movie.title}</h3>
+          <div className="p-4 flex-1 flex flex-col justify-between">
+            <h3 className="font-semibold line-clamp-2 mb-2 min-h-[3rem]">{movie.title}</h3>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
